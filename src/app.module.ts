@@ -4,14 +4,23 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { MongooseModule } from '@nestjs/mongoose';
-import { ConfigModule } from '@nestjs/config';
+import { AppConfigModule } from './app-config/app-config.module';
+import { AppConfigService } from './app-config/app-config.service';
 
 @Module({
   imports: [
+    // Load ConfigModule FIRST to make env vars available
+    AppConfigModule,
+    // Use forRootAsync to access ConfigService
+    MongooseModule.forRootAsync({
+      imports: [AppConfigModule],
+      inject: [AppConfigService],
+      useFactory: (appConfigService: AppConfigService) => ({
+        uri: appConfigService.MONGODB_URL,
+      }),
+    }),
     AuthModule,
     UserModule,
-    MongooseModule.forRoot(process.env.MONGODB_URL as string), // For creating the database connection
-    ConfigModule.forRoot(),
   ],
   controllers: [AppController],
   providers: [AppService],

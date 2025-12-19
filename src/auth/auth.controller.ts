@@ -1,6 +1,7 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/registerUser.dto';
+import { LoginUserDto } from './dto/loginUser.dto';
 
 @Controller('auth') // Common prefix for this controller's routes : /auth/...
 export class AuthController {
@@ -8,5 +9,10 @@ export class AuthController {
   @Post('register') // Route handler for POST /auth/register
   register(@Body() registerDto: RegisterDto) {
     return this.authService.registerUser(registerDto);
+  }
+
+  @Post('login')
+  login(@Body() loginDto: LoginUserDto) {
+    return this.authService.loginUser(loginDto);
   }
 }

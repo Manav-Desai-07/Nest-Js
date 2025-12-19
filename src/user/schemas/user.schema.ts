@@ -1,4 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { HydratedDocument } from 'mongoose';
+import { Role } from 'src/types/common.type';
 
 /* The method of writing the schema for the mongoose model is same as of express with mongoose
     but defining the schema using the class and @Prop decorator
@@ -37,7 +39,15 @@ export class User {
     required: true,
   })
   password: string;
+
+  @Prop({
+    type: String,
+    required: true,
+    enum: Object.keys(Role),
+    default: Role.student,
+  })
+  role: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
-export type UserDocument = User & Document;
+export type UserDocument = HydratedDocument<User>;
