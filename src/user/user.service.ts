@@ -1,13 +1,18 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './schemas/user.schema';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { RegisterDto } from 'src/auth/dto/registerUser.dto';
 import { ERROR_CODES } from 'src/constants/common.constants';
 
 @Injectable()
 export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
+
+  async findById(id: Types.ObjectId) {
+    return await this.userModel.findById(id);
+  }
+
   async createUser(registerUserDto: RegisterDto) {
     try {
       const user = await this.userModel.create(registerUserDto);

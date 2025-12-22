@@ -43,7 +43,7 @@ export class User {
   @Prop({
     type: String,
     required: true,
-    enum: Object.keys(Role),
+    enum: Object.values(Role),
     default: Role.student,
   })
   role: string;
